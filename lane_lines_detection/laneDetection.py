@@ -2,14 +2,18 @@ import cv2
 import math
 import numpy as np
 
-delta = 120  # 平移量
-margin = 100  # 窗口半宽
+delta = 150  # 平移量
+margin = 90  # 窗口半宽
 minpix = 25  # 车道线最小像素数
-nwindows = 10  # 窗口个数
+nwindows = 12  # 窗口个数
+eps = 1e-4
 
 
 class camera:
     def __init__(self):
+        self.d = 50.0
+        self.x = 0.0
+        self.last_my_theta = 0
         self.cap = cv2.VideoCapture('chanllenge_video.mp4')
         self.aP = [0., 0.]
         self.lastP = [0., 0.]
@@ -21,7 +25,6 @@ class camera:
         ret, img = self.cap.read()
         if ret:
             cv2.waitKey(1)
-            # Convert Image
             gray_blur = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             kernel = np.ones((3, 3), np.uint8)
             gray_blur = cv2.erode(gray_blur, kernel, iterations=1)
@@ -71,6 +74,18 @@ class camera:
             my_k = (self.lastP[1] - self.aP[1]) / (self.lastP[0] - self.aP[0])
             self.lastP = self.aP[:]
             my_theta = math.atan(my_k)
+            # 矫正转角
+            if my_theta * self.last_my_theta < 0:
+                self.x = 0
+                self.d = 50
+            elif my_theta > 0:
+                self.x += 0.4
+                self.d += self.x
+            elif my_theta < 0:
+                self.x -= 0.4
+                self.d += self.x
+            self.last_my_theta = my_theta
+
             # 构造输出图像
             cv2.putText(binary_warped, str(my_theta), (0, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1)
             cv2.circle(binary_warped, (int(aim_lane_p[0]), int(aim_lane_p[1])), 24, (0, 0, 0), 1)
