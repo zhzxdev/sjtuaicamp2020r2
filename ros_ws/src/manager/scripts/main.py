@@ -77,9 +77,8 @@ def realmain():
         # USE (traffic_light_data)
         # TO CHANGE: GEAR, DIRECTION(IF DRIVE, USE servodata_mean)
         # GEAR: 1 - D(RIVE); 2 - N(EUTRAL).
-        manul = 1
 
-        pub_m.publish(manul)
+        # pub_m.publish(manul)
         # pub_d.publish(direction)
         # pub_s.publish(speed)
         # pub_g.publish(gear)
