@@ -1,21 +1,17 @@
 import cv2
-import os
-import sys
-import glob
-import numpy as np
 import math
+import numpy as np
 
-# 距离映射
-x_cmPerPixel = 90 / 665.
+x_cmPerPixel = 90 / 665.  # cm -> pixel
 y_cmPerPixel = 81 / 680.
 delta = 150
 y_offset = 50.  # cm
-# 轴间距
-I = 58.
-# 摄像头坐标系与车中心间距
-D = 18.
-# 计算cmdSteer的系数
-k = -19
+I = 58.  # 轴间距
+D = 18.  # 摄像头坐标系与车中心间距
+k = -19  # 计算cmdSteer的系数
+margin = 100  # 窗口半宽
+minpix = 25  # 车道线最小像素数
+nwindows = 10  # 窗口个数
 
 
 class camera:
@@ -57,17 +53,14 @@ class camera:
                 hist_sum_y_ratio = 1
 
             lane_base = (list(filter(lambda x: histogram_x[x] > 30000, range(binary_warped.shape[0]))))[0]
-            #lane_base = np.argmax(histogram_x)
+            # lane_base = np.argmax(histogram_x)
             midpoint = int(histogram_x.shape[0] / 2)
 
-            nwindows = 10
             window_height = int(binary_warped.shape[0] / nwindows)
             nonzero = binary_warped.nonzero()
             nonzeroy = np.array(nonzero[0])
             nonzerox = np.array(nonzero[1])
             lane_current = lane_base
-            margin = 100
-            minpix = 25
 
             lane_inds = []
 
