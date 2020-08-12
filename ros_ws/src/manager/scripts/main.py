@@ -57,23 +57,24 @@ def realmain():
 
     #更新频率是1hz
     rospy.loginfo(rospy.is_shutdown())
-    n = 1
-    servodata_list = n * [servodata]
+    # n = 1
+    # servodata_list = n * [servodata]
     while not rospy.is_shutdown():
         # KINEMATIC CONTROL CODE HERE
-        servodata_list[0:n - 1] = servodata_list[1:n]
-        servodata_list[n - 1] = servodata
+        # servodata_list[0:n - 1] = servodata_list[1:n]
+        # servodata_list[n - 1] = servodata
         #servodata_mean = np.mean(servodata_list)*n
-        servoSum = 0
-        for i in servodata_list:
-            servoSum += i
+        # servoSum = 0
+        # for i in servodata_list:
+        #     servoSum += i
 
-        servodata_mean = servoSum / n
+        # servodata_mean = servoSum / n
 
         # WRITE YOUR CONDITION STATEMENT HERE, PLS FINISH
         # USE (traffic_light_data)
         # TO CHANGE: GEAR, DIRECTION(IF DRIVE, USE servodata_mean)
         # GEAR: 1 - D(RIVE); 2 - N(EUTRAL).
+        manul = 1
 
         pub_m.publish(manul)
         pub_d.publish(direction)

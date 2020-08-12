@@ -1,1 +1,5 @@
 .vscode
+/.idea
+*.mp4
+/temp/**/*
+!/temp/.gitkeep
