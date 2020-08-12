@@ -117,7 +117,7 @@ def realmain():
     pub = r.Publisher('/lane_det', Int32, queue_size=10)
     r.init_node('lanecam', anonymous=True)
     rate = r.Rate(10)
-    camera cam
+    cam = camera()
     while not r.is_shutdown():
         pub.publish(cam.spin())
         rate.sleep()
