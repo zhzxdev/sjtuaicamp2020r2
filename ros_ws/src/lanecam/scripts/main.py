@@ -38,7 +38,7 @@ class camera:
     def spin(self):
         ret, img = self.cap.read()
         if ret:
-            self.VWirte.write(frame)
+            self.VWirte.write(img)
 
             cv2.waitKey(1)
             gray_blur = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
