@@ -4,16 +4,16 @@ import time
 output_name = 'output.avi'
 
 if __name__ == '__main__':
-    camera = cv.VideoCapture(0)  # 获取摄像头
-    fps = camera.get(cv.CAP_PROP_FPS)  # 获取帧率
-    width = int(camera.get(cv.CAP_PROP_FRAME_WIDTH))  # 一定要转int 否则是浮点数
+    camera = cv.VideoCapture(0)
+    fps = camera.get(cv.CAP_PROP_FPS)
+    width = int(camera.get(cv.CAP_PROP_FRAME_WIDTH))
     height = int(camera.get(cv.CAP_PROP_FRAME_HEIGHT))
-    size = (width, height)  # 大小
-    VWirte = cv.VideoWriter(output_name, cv.VideoWriter_fourcc('I', '4', '2', '0'), fps, size)  # 初始化文件写入 文件名 编码解码器 帧率 文件大小
+    size = (width, height)
+    VWirte = cv.VideoWriter(output_name, cv.VideoWriter_fourcc('I', '4', '2', '0'), fps, size)
     success, frame = camera.read()
     while success:
         VWirte.write(frame)
         success, frame = camera.read()
-    time.sleep(1)  # y延迟一秒关闭摄像头 否则会出现 terminating async callback 异步处理错误
-    camera.release()  # 释放摄像头
+    time.sleep(1)
+    camera.release()
     print('ok')
