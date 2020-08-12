@@ -87,7 +87,15 @@ def realmain():
         # TO CHANGE: GEAR, DIRECTION(IF DRIVE, USE servodata_mean)
         # GEAR: 1 - D(RIVE); 2 - N(EUTRAL).
 
-        # applyState()
+        state_speed = state_speed + 1
+        if state_speed > 100:
+            state_speed = 0
+        
+        state_direction = state_direction + 1
+        if state_direction > 100:
+            state_direction = 0
+
+        applyState()
         rate.sleep()
 
 
