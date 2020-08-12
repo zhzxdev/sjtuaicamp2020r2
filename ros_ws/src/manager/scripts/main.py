@@ -91,9 +91,7 @@ def realmain():
         if state_speed > 100:
             state_speed = 0
         
-        state_direction = state_direction + 1
-        if state_direction > 100:
-            state_direction = 0
+        state_direction = 50
 
         applyState()
         rate.sleep()
