@@ -58,6 +58,7 @@ class camera:
             lane_base = list(filter(lambda x: histogram_x[x] > 30000, range(len(histogram_x))))
             if len(lane_base) == 0:
                 return 40
+            lane_base = lane_base[0]
 
             window_height = int(binary_warped.shape[0] / nwindows)
             nonzero = binary_warped.nonzero()
