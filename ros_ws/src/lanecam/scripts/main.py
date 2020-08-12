@@ -21,7 +21,7 @@ class camera:
         self.d = 50.0
         self.x = 0.0
         self.last_my_theta = 0
-        self.cap = cv2.VideoCapture('chanllenge_video.mp4')
+        self.cap = cv2.VideoCapture(0)
         self.aP = [0., 0.]
         self.lastP = [0., 0.]
         # 录像
