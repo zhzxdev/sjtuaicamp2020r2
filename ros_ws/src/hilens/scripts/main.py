@@ -14,7 +14,6 @@ def realmain():
     # print("Module HiLens")
     pub = r.Publisher('/sign_det', Int32, queue_size=10)
     r.init_node('hilens', anonymous=True)
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 65536)
     while not r.is_shutdown():
         data, addr = sock.recvfrom(1)
