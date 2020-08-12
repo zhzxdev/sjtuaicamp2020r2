@@ -22,6 +22,7 @@ pub_g = rospy.Publisher('/auto_driver/send/gear', Int32, queue_size=10)
 
 
 def applyState():
+    print('current state -> ', state_manul, state_direction, state_speed, state_gear)
     pub_m.publish(state_manul)
     pub_d.publish(state_direction)
     pub_s.publish(state_speed)
@@ -29,14 +30,19 @@ def applyState():
 
 
 ################################################################################ Callbacks
-# data: int, 0 for stop, 1 for slow, 2 for fast
-def laneCb(data):
-    print(data)
-
-
 # data: int
+def laneCb(data):
+    print('lane -> ', data)
+    state_direction = data
+
+
+# data: int, 0 for stop, 1 for slow, 2 for fast
+speeds = [0, 20, 40]
+
+
 def signCb(data):
-    print(data)
+    print('sign -> ', data)
+    state_speed = speeds[data]
 
 
 def realmain():
