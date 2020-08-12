@@ -16,6 +16,7 @@ modifier = 0.3
 
 output_name = '/home/pi/Desktop/output.avi'
 
+
 class camera:
     def __init__(self):
         self.d = 50.0
@@ -29,8 +30,7 @@ class camera:
         self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.size = (self.width, self.height)
-        self.VWirte = cv2.VideoWriter(output_name, cv2.VideoWriter_fourcc('I', '4', '2', '0'), self.fps,
-                                 self.size)
+        self.VWirte = cv2.VideoWriter(output_name, cv2.VideoWriter_fourcc('I', '4', '2', '0'), self.fps, self.size)
 
     def __del__(self):
         self.cap.release()
@@ -68,8 +68,7 @@ class camera:
                 win_y_high = binary_warped.shape[0] - window * window_height
                 win_x_low = lane_current - margin
                 win_x_high = lane_current + margin
-                good_inds = ((nonzeroy >= win_y_low) & (nonzeroy < win_y_high) & (nonzerox >= win_x_low) & (
-                        nonzerox < win_x_high)).nonzero()[0]
+                good_inds = ((nonzeroy >= win_y_low) & (nonzeroy < win_y_high) & (nonzerox >= win_x_low) & (nonzerox < win_x_high)).nonzero()[0]
                 lane_inds.append(good_inds)
                 if len(good_inds) > minpix:
                     lane_current = int(np.mean(nonzerox[good_inds]))
@@ -104,7 +103,6 @@ class camera:
                 self.x -= modifier
                 self.d += self.x
             self.last_my_theta = my_theta
-
 
             cv2.putText(binary_warped, str(my_theta), (0, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1)
             cv2.circle(binary_warped, (int(aim_lane_p[0]), int(aim_lane_p[1])), 24, (0, 0, 0), 1)
