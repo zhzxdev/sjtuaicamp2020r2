@@ -57,7 +57,7 @@ class camera:
             histogram_x = np.sum(binary_warped[int(binary_warped.shape[0] / 2):, :], axis=0)  # Left Part
             lane_base = list(filter(lambda x: histogram_x[x] > 30000, range(len(histogram_x))))
             if len(lane_base) == 0:
-                return
+                return 40
 
             window_height = int(binary_warped.shape[0] / nwindows)
             nonzero = binary_warped.nonzero()
@@ -112,6 +112,7 @@ class camera:
                 cv2.circle(binary_warped, (int(self.aP[0]), int(self.aP[1])), 24, (255, 255, 255), 1)
                 binary_warped = cv2.resize(binary_warped, (0, 0), fx=.5, fy=.5)
                 cv2.imshow('out', binary_warped)
+            cv2.waitKey(100)
 
 
 def realmain():
