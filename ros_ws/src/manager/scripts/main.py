@@ -38,7 +38,7 @@ def laneCb(data):
 
 
 # data: int, 0 for stop, 1 for slow, 2 for fast
-speeds = [0, 20, 40]
+speeds = [0, 5, 15] # TODO Use real speeds
 
 
 def signCb(data):
