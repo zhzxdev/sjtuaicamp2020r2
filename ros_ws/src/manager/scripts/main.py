@@ -34,6 +34,11 @@ def realmain():
     pub_s = rospy.Publisher('/auto_driver/send/speed', Int32, queue_size=10)
     pub_g = rospy.Publisher('/auto_driver/send/gear', Int32, queue_size=10)
 
+    # Reset
+    pub_d.publish(50)
+    pub_s.publish(0)
+    pub_g.publish(2)
+
     manul = 0  # 0 - Automatic
     speed = 20  # SPEED
     direction = 50  # 0-LEFT-50-RIGHT-100
