@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy as r
+from std_msgs.msg import Int32
 import socket
 import os
 
@@ -10,7 +11,7 @@ port = 7777
 
 def realmain():
     # print("Module HiLens")
-    pub = r.Publisher('/sign_det')
+    pub = r.Publisher('/sign_det', Int32)
     r.init_node('hilens', anonymous=True)
     rate = r.Rate(10)
     while not r.is_shutdown():
