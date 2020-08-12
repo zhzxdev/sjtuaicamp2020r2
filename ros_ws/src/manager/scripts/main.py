@@ -57,6 +57,8 @@ def realmain():
     rate = rospy.Rate(10)
     rospy.Subscriber("/lane_det", Twist, lanecallback)
     rospy.Subscriber("/sign_det", Int32, lightcallback)
+    rospy.Subscriber("/bluetooth/received/speed", Int32, lambda data: pub_s.publish(data))
+    rospy.Subscriber("/bluetooth/received/gear", Int32, lambda data: pub_g.publish(data))
     rospy.loginfo(rospy.is_shutdown())
     # cmd_vel = Twist()
     # flag = 0
@@ -81,7 +83,7 @@ def realmain():
         # TO CHANGE: GEAR, DIRECTION(IF DRIVE, USE servodata_mean)
         # GEAR: 1 - D(RIVE); 2 - N(EUTRAL).
 
-        applyState()
+        # applyState()
         rate.sleep()
 
 
