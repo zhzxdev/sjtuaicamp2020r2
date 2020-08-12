@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import rospy as r
 import socket
 import os
