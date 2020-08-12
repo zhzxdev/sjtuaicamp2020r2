@@ -20,7 +20,8 @@ class camera:
         self.d = 50.0
         self.x = 0.0
         self.last_my_theta = 0
-        self.cap = cv2.VideoCapture('/dev/video10')
+        # self.cap = cv2.VideoCapture('/dev/video10')
+        self.cap = cv2.VideoCapture('test2.mp4')
         self.aP = [0., 0.]
         self.lastP = [0., 0.]
         self.width = 1280

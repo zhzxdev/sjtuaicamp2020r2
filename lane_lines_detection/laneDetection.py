@@ -7,14 +7,14 @@ margin = 90
 minpix = 25
 nwindows = 12
 eps = 1e-4
-modifier = 0.3
+modifier = 0.1
 
 class camera:
     def __init__(self):
         self.d = 50.0
         self.x = 0.0
         self.last_my_theta = 0
-        self.cap = cv2.VideoCapture('chanllenge_video.mp4')
+        self.cap = cv2.VideoCapture('test2.mp4')
         self.aP = [0., 0.]
         self.lastP = [0., 0.]
 
@@ -24,7 +24,6 @@ class camera:
     def spin(self):
         ret, img = self.cap.read()
         if ret:
-
             cv2.waitKey(1)
             gray_blur = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             kernel = np.ones((3, 3), np.uint8)
@@ -37,7 +36,10 @@ class camera:
             binary_warped = cv2.warpPerspective(origin_thr, M, (1280, 720), cv2.INTER_LINEAR)
 
             histogram_x = np.sum(binary_warped[int(binary_warped.shape[0] / 2):, :], axis=0)  # Left Part
-            lane_base = (list(filter(lambda x: histogram_x[x] > 30000, range(binary_warped.shape[0]))))[0]
+            lane_base = list(filter(lambda x: histogram_x[x] > 5000, range(len(histogram_x))))
+            if len(lane_base) == 0:
+                return 40
+            lane_base = lane_base[0]
 
             window_height = int(binary_warped.shape[0] / nwindows)
             nonzero = binary_warped.nonzero()
