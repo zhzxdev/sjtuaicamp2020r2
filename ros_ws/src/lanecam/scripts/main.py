@@ -55,7 +55,7 @@ class camera:
             binary_warped = cv2.warpPerspective(origin_thr, M, (1280, 720), cv2.INTER_LINEAR)
 
             histogram_x = np.sum(binary_warped[int(binary_warped.shape[0] / 2):, :], axis=0)  # Left Part
-            lane_base = list(filter(lambda x: histogram_x[x] > 30000, range(len(histogram_x))))
+            lane_base = list(filter(lambda x: histogram_x[x] > 2000, range(len(histogram_x))))
             if len(lane_base) == 0:
                 return 40
             lane_base = lane_base[0]
