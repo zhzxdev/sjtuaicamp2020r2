@@ -8,11 +8,6 @@ from std_msgs.msg import Bool
 import numpy as np
 import threading
 
-lane_vel = Twist()
-angularScale = 6  # 180/30
-servodata = 0
-traffic_light_data = 0
-
 ################################################################################ STATE
 state_manul = 0  # 0 - Automatic
 state_speed = 0  # SPEED
@@ -33,21 +28,14 @@ def applyState():
     pub_g.publish(state_gear)
 
 
-def laneCb(msg):
-    global lane_vel
-    lane_vel = msg
-    _servoCmdMsg = msg.angular.z * angularScale + 90
-    global servodata
-    servodata = min(max(0, _servoCmdMsg), 180)
-    servodata = 100 - servodata * 100 / 180
+################################################################################ Callbacks
+# data: int, 0 for stop, 1 for slow, 2 for fast
+def laneCb(data):
+    print(data)
 
 
-def lightCb(data):
-    global traffic_light_data
-    traffic_light_data = data.data
-
-
-def printCb(data):
+# data: int
+def signCb(data):
     print(data)
 
 
@@ -59,11 +47,8 @@ def realmain():
     rospy.init_node('manager', anonymous=True)
     threading.Thread(target=lambda: rospy.spin()).start()
     rate = rospy.Rate(10)
-    rospy.Subscriber("/lane_det", Twist, laneCb)
-    rospy.Subscriber("/sign_det", Int32, lightCb)
-    rospy.Subscriber("/bluetooth/received/speed", Int32, printCb)
-    rospy.Subscriber("/bluetooth/received/gear", Int32, printCb)
-    rospy.loginfo(rospy.is_shutdown())
+    rospy.Subscriber("/lane_det", Int32, laneCb)
+    rospy.Subscriber("/sign_det", Int32, signCb)
     # cmd_vel = Twist()
     # flag = 0
     # p_flag = 1
@@ -86,13 +71,6 @@ def realmain():
         # USE (traffic_light_data)
         # TO CHANGE: GEAR, DIRECTION(IF DRIVE, USE servodata_mean)
         # GEAR: 1 - D(RIVE); 2 - N(EUTRAL).
-
-        state_speed = state_speed + 1
-        if state_speed > 100:
-            state_speed = 0
-        
-        state_direction = 50
-
         applyState()
         rate.sleep()
 

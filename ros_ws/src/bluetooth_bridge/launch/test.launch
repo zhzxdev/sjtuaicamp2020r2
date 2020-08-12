@@ -5,6 +5,4 @@
   </node>
   <node name="sound_server_node" pkg="bluetooth_bridge" type="sound_server_node.py" output="log">
   </node>
-  <node name="manager" pkg="manager" type="main.py" output="screen">
-  </node>
 </launch>
