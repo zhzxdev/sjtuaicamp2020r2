@@ -45,15 +45,15 @@ def realmain():
     servodata_list = []
     n_loop = 1
 
-    rospy.init_node('kinematicCtrl', anonymous=True)
+    rospy.init_node('manager', anonymous=True)
 
     add_thread = threading.Thread(target=lambda: rospy.spin())
 
     add_thread.start()
 
     rate = rospy.Rate(10)
-    rospy.Subscriber("/lane_vel", Twist, lanecallback)
-    rospy.Subscriber("/traffic_light", Int32, lightcallback)
+    rospy.Subscriber("/lane_det", Twist, lanecallback)
+    rospy.Subscriber("/sign_det", Int32, lightcallback)
 
     #更新频率是1hz
     rospy.loginfo(rospy.is_shutdown())
