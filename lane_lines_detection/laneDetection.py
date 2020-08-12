@@ -7,6 +7,7 @@ margin = 90  # 窗口半宽
 minpix = 25  # 车道线最小像素数
 nwindows = 12  # 窗口个数
 eps = 1e-4
+modifier = 0.3
 
 output_name = 'output.avi'
 
@@ -92,10 +93,10 @@ class camera:
                 self.x = 0
                 self.d = 50
             elif my_theta > 0:
-                self.x += 0.4
+                self.x += modifier
                 self.d += self.x
             elif my_theta < 0:
-                self.x -= 0.4
+                self.x -= modifier
                 self.d += self.x
             self.last_my_theta = my_theta
 
