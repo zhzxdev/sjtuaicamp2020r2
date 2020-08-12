@@ -29,7 +29,7 @@ def lightcallback(data):
 
 
 def realmain():
-    pub_m = rospy.Publisher('/bluetooth/received/manul', Int32, queue_size=10)
+    pub_m = rospy.Publisher('/bluetooth/received/manual', Int32, queue_size=10)
     pub_d = rospy.Publisher('/auto_driver/send/direction', Int32, queue_size=10)
     pub_s = rospy.Publisher('/auto_driver/send/speed', Int32, queue_size=10)
     pub_g = rospy.Publisher('/auto_driver/send/gear', Int32, queue_size=10)
@@ -76,9 +76,9 @@ def realmain():
         manul = 1
 
         pub_m.publish(manul)
-        pub_d.publish(direction)
-        pub_s.publish(speed)
-        pub_g.publish(gear)
+        # pub_d.publish(direction)
+        # pub_s.publish(speed)
+        # pub_g.publish(gear)
         rate.sleep()
 
 
