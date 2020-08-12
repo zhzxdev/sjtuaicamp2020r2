@@ -14,7 +14,7 @@ nwindows = 12  # 窗口个数
 eps = 1e-4
 modifier = 0.3
 
-output_name = 'output.avi'
+output_name = '/home/pi/Desktop/output.avi'
 
 class camera:
     def __init__(self):
