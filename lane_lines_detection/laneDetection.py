@@ -53,6 +53,7 @@ class camera:
                 hist_sum_y_ratio = 1
 
             lane_base = (list(filter(lambda x: histogram_x[x] > 30000, range(binary_warped.shape[0]))))[0]
+            # lane_base = np.argmax(histogram_x)
             midpoint = int(histogram_x.shape[0] / 2)
 
             window_height = int(binary_warped.shape[0] / nwindows)
@@ -129,12 +130,12 @@ class camera:
                 self.aP[1] = aimLaneP[1] + math.sin(theta) * LorR * delta
 
             myK = (self.lastP[1] - self.aP[1]) / (self.lastP[0] - self.aP[0])
+            self.lastP = self.aP[:]
             myTheta = math.atan(myK)
             cv2.putText(binary_warped, str(myTheta), (0, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1)
             cv2.circle(binary_warped, (int(aimLaneP[0]), int(aimLaneP[1])), 24, (0, 0, 0), 1)
             cv2.circle(binary_warped, (int(self.aP[0]), int(self.aP[1])), 24, (255, 255, 255), 1)
             binary_warped = cv2.resize(binary_warped, (0, 0), fx=.5, fy=.5)
-            self.lastP = self.aP
             cv2.imshow('pic', binary_warped)
 
 
