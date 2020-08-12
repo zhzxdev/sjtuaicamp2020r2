@@ -33,7 +33,7 @@ def applyState():
     pub_g.publish(state_gear)
 
 
-def lanecallback(msg):
+def laneCb(msg):
     global lane_vel
     lane_vel = msg
     _servoCmdMsg = msg.angular.z * angularScale + 90
@@ -42,9 +42,13 @@ def lanecallback(msg):
     servodata = 100 - servodata * 100 / 180
 
 
-def lightcallback(data):
+def lightCb(data):
     global traffic_light_data
     traffic_light_data = data.data
+
+
+def printCb(data):
+    print(data)
 
 
 def realmain():
@@ -55,10 +59,10 @@ def realmain():
     rospy.init_node('manager', anonymous=True)
     threading.Thread(target=lambda: rospy.spin()).start()
     rate = rospy.Rate(10)
-    rospy.Subscriber("/lane_det", Twist, lanecallback)
-    rospy.Subscriber("/sign_det", Int32, lightcallback)
-    rospy.Subscriber("/bluetooth/received/speed", Int32, lambda data: pub_s.publish(data))
-    rospy.Subscriber("/bluetooth/received/gear", Int32, lambda data: pub_g.publish(data))
+    rospy.Subscriber("/lane_det", Twist, laneCb)
+    rospy.Subscriber("/sign_det", Int32, lightCb)
+    rospy.Subscriber("/bluetooth/received/speed", Int32, printCb)
+    rospy.Subscriber("/bluetooth/received/gear", Int32, printCb)
     rospy.loginfo(rospy.is_shutdown())
     # cmd_vel = Twist()
     # flag = 0
