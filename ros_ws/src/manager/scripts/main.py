@@ -55,7 +55,6 @@ def realmain():
     rospy.Subscriber("/lane_det", Twist, lanecallback)
     rospy.Subscriber("/sign_det", Int32, lightcallback)
 
-    #更新频率是1hz
     rospy.loginfo(rospy.is_shutdown())
     # n = 1
     # servodata_list = n * [servodata]
