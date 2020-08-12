@@ -11,7 +11,7 @@ port = 7777
 
 def realmain():
     # print("Module HiLens")
-    pub = r.Publisher('/sign_det', Int32)
+    pub = r.Publisher('/sign_det', Int32, queue_size=10)
     r.init_node('hilens', anonymous=True)
     rate = r.Rate(10)
     while not r.is_shutdown():

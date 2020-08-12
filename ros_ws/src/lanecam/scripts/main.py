@@ -3,8 +3,9 @@
 import rospy as r
 from std_msgs.msg import Int32
 
+
 def realmain():
-    pub = r.Publisher('/lane_det', Int32)
+    pub = r.Publisher('/lane_det', Int32, queue_size=10)
     r.init_node('lanecam', anonymous=True)
     rate = r.Rate(10)
     while not r.is_shutdown():
