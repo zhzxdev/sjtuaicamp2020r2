@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy as r
-
+from std_msgs.msg import Int32
 
 def realmain():
     pub = r.Publisher('/lane_det', Int32)
