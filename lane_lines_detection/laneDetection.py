@@ -63,7 +63,7 @@ class camera:
             aim_lane_p = [pixel_x[front_distance], pixel_y[front_distance]]
 
             last_x = sorted(list(nonzerox[i] for i in range(len(nonzeroy)) if nonzeroy[i] == aim_lane_p[1]))[-1]
-            if last_x - aim_lane_p[0] > 40:
+            if last_x - aim_lane_p[0] > 100:
                 self.aP[0] = aim_lane_p[0] + delta
             else:
                 self.aP[0] = aim_lane_p[0] - delta
