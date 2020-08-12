@@ -76,9 +76,9 @@ def realmain():
         manul = 1
 
         pub_m.publish(manul)
-        pub_d.publish(direction)
-        pub_s.publish(speed)
-        pub_g.publish(gear)
+        # pub_d.publish(direction)
+        # pub_s.publish(speed)
+        # pub_g.publish(gear)
         rate.sleep()
 
 
