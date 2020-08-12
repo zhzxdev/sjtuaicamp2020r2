@@ -33,7 +33,7 @@ def applyState():
 # data: int
 def laneCb(data):
     print('lane -> ', data)
-    state_direction = data
+    state_direction = data.data
 
 
 # data: int, 0 for stop, 1 for slow, 2 for fast
@@ -42,7 +42,7 @@ speeds = [0, 20, 40]
 
 def signCb(data):
     print('sign -> ', data)
-    state_speed = speeds[data]
+    state_speed = speeds[data.data]
 
 
 def realmain():
