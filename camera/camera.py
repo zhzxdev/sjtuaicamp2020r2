@@ -1,8 +1,7 @@
 import cv2 as cv
 import time
 
-output_name = '123asd.avi'
-total_time = 10
+output_name = 'output.avi'
 
 if __name__ == '__main__':
     camera = cv.VideoCapture(0)  # 获取摄像头
@@ -12,11 +11,9 @@ if __name__ == '__main__':
     size = (width, height)  # 大小
     VWirte = cv.VideoWriter(output_name, cv.VideoWriter_fourcc('I', '4', '2', '0'), fps, size)  # 初始化文件写入 文件名 编码解码器 帧率 文件大小
     success, frame = camera.read()
-    numFramesRemaining = total_time * fps
-    while success and numFramesRemaining:
+    while success:
         VWirte.write(frame)
         success, frame = camera.read()
-        numFramesRemaining -= 1
     time.sleep(1)  # y延迟一秒关闭摄像头 否则会出现 terminating async callback 异步处理错误
     camera.release()  # 释放摄像头
     print('ok')

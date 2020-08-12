@@ -8,6 +8,7 @@ minpix = 25  # 车道线最小像素数
 nwindows = 12  # 窗口个数
 eps = 1e-4
 
+output_name = 'output.avi'
 
 class camera:
     def __init__(self):
@@ -17,6 +18,13 @@ class camera:
         self.cap = cv2.VideoCapture('chanllenge_video.mp4')
         self.aP = [0., 0.]
         self.lastP = [0., 0.]
+        # 录像
+        self.fps = self.cap.get(cv2.CAP_PROP_FPS)  # 获取帧率
+        self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))  # 一定要转int 否则是浮点数
+        self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.size = (self.width, self.height)
+        self.VWirte = cv2.VideoWriter(output_name, cv2.VideoWriter_fourcc('I', '4', '2', '0'), self.fps,
+                                 self.size)  # 初始化文件写入 文件名 编码解码器 帧率 文件大小
 
     def __del__(self):
         self.cap.release()
@@ -24,6 +32,11 @@ class camera:
     def spin(self):
         ret, img = self.cap.read()
         if ret:
+            # 录像
+            success, frame = self.cap.read()
+            if success:
+                self.VWirte.write(frame)
+
             cv2.waitKey(1)
             gray_blur = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             kernel = np.ones((3, 3), np.uint8)
