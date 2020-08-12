@@ -34,6 +34,7 @@ def realmain():
     pub_s = rospy.Publisher('/auto_driver/send/speed', Int32, queue_size=10)
     pub_g = rospy.Publisher('/auto_driver/send/gear', Int32, queue_size=10)
 
+    rospy.init_node('manager', anonymous=True)
     # Reset
     pub_d.publish(50)
     pub_s.publish(0)
@@ -49,8 +50,6 @@ def realmain():
     p_flag = 1
     servodata_list = []
     n_loop = 1
-
-    rospy.init_node('manager', anonymous=True)
 
     add_thread = threading.Thread(target=lambda: rospy.spin())
 
