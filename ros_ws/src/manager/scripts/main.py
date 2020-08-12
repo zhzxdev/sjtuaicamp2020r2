@@ -32,7 +32,6 @@ def applyState():
 ################################################################################ Callbacks
 # data: int
 def laneCb(data):
-    print('lane -> ', data)
     global state_direction
     state_direction = data.data
 
@@ -42,7 +41,6 @@ speeds = [0, 5, 15] # TODO Use real speeds
 
 
 def signCb(data):
-    print('sign -> ', data)
     global state_speed
     state_speed = speeds[data.data]
 

@@ -14,12 +14,13 @@ nwindows = 12
 eps = 1e-4
 modifier = 0.3
 
+
 class camera:
     def __init__(self):
         self.d = 50.0
         self.x = 0.0
         self.last_my_theta = 0
-        self.cap = cv2.VideoCapture('chanllenge_video.mp4')
+        self.cap = cv2.VideoCapture('/dev/video10')
         self.aP = [0., 0.]
         self.lastP = [0., 0.]
         self.width = 1280
@@ -42,7 +43,7 @@ class camera:
         ret, img = self.cap.read()
         if ret:
             self.out.write(img)
-            cv2.waitKey(1)
+            cv2.imshow('raw', img)
             gray_blur = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             kernel = np.ones((3, 3), np.uint8)
             gray_blur = cv2.erode(gray_blur, kernel, iterations=1)
@@ -69,8 +70,7 @@ class camera:
                 win_y_high = binary_warped.shape[0] - window * window_height
                 win_x_low = lane_current - margin
                 win_x_high = lane_current + margin
-                good_inds = ((nonzeroy >= win_y_low) & (nonzeroy < win_y_high) & (nonzerox >= win_x_low) & (
-                        nonzerox < win_x_high)).nonzero()[0]
+                good_inds = ((nonzeroy >= win_y_low) & (nonzeroy < win_y_high) & (nonzerox >= win_x_low) & (nonzerox < win_x_high)).nonzero()[0]
                 lane_inds.append(good_inds)
                 if len(good_inds) > minpix:
                     lane_current = int(np.mean(nonzerox[good_inds]))
@@ -106,13 +106,12 @@ class camera:
                 self.d += self.x
             self.last_my_theta = my_theta
 
-
             if self.DEBUG:
                 cv2.putText(binary_warped, str(my_theta), (0, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1)
                 cv2.circle(binary_warped, (int(aim_lane_p[0]), int(aim_lane_p[1])), 24, (0, 0, 0), 1)
                 cv2.circle(binary_warped, (int(self.aP[0]), int(self.aP[1])), 24, (255, 255, 255), 1)
                 binary_warped = cv2.resize(binary_warped, (0, 0), fx=.5, fy=.5)
-                cv2.imshow('pic', binary_warped)
+                cv2.imshow('out', binary_warped)
 
 
 def realmain():
