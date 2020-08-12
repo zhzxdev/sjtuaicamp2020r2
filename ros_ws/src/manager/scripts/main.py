@@ -13,6 +13,21 @@ angularScale = 6  # 180/30
 servodata = 0
 traffic_light_data = 0
 
+################################################################################ STATE
+state_manul = 0  # 0 - Automatic
+state_speed = 0  # SPEED
+state_direction = 50  # 0-LEFT-50-RIGHT-100
+state_gear = 1  # 1 - Drive, 2 - Stop
+
+def applyState():
+    global state_manul
+    global state_direction
+    global state_speed
+    global state_gear
+    pub_m.publish(state_manul)
+    pub_d.publish(state_direction)
+    pub_s.publish(state_speed)
+    pub_g.publish(state_gear)
 
 def lanecallback(msg):
     global lane_vel
@@ -29,37 +44,25 @@ def lightcallback(data):
 
 
 def realmain():
+    global state_manul
+    global state_direction
+    global state_speed
+    global state_gear
     pub_m = rospy.Publisher('/bluetooth/received/manual', Int32, queue_size=10)
     pub_d = rospy.Publisher('/auto_driver/send/direction', Int32, queue_size=10)
     pub_s = rospy.Publisher('/auto_driver/send/speed', Int32, queue_size=10)
     pub_g = rospy.Publisher('/auto_driver/send/gear', Int32, queue_size=10)
-
     rospy.init_node('manager', anonymous=True)
-    # Reset
-    pub_d.publish(50)
-    pub_s.publish(0)
-    pub_g.publish(2)
-
-    manul = 0  # 0 - Automatic
-    speed = 20  # SPEED
-    direction = 50  # 0-LEFT-50-RIGHT-100
-    gear = 1  # 1 - Drive, 2 - Stop
-
-    cmd_vel = Twist()
-    flag = 0
-    p_flag = 1
-    servodata_list = []
-    n_loop = 1
-
-    add_thread = threading.Thread(target=lambda: rospy.spin())
-
-    add_thread.start()
-
+    threading.Thread(target=lambda: rospy.spin()).start()
     rate = rospy.Rate(10)
     rospy.Subscriber("/lane_det", Twist, lanecallback)
     rospy.Subscriber("/sign_det", Int32, lightcallback)
-
     rospy.loginfo(rospy.is_shutdown())
+    # cmd_vel = Twist()
+    # flag = 0
+    # p_flag = 1
+    # servodata_list = []
+    # n_loop = 1 
     # n = 1
     # servodata_list = n * [servodata]
     while not rospy.is_shutdown():
@@ -78,10 +81,7 @@ def realmain():
         # TO CHANGE: GEAR, DIRECTION(IF DRIVE, USE servodata_mean)
         # GEAR: 1 - D(RIVE); 2 - N(EUTRAL).
 
-        # pub_m.publish(manul)
-        # pub_d.publish(direction)
-        # pub_s.publish(speed)
-        # pub_g.publish(gear)
+        applyState()
         rate.sleep()
 
 
