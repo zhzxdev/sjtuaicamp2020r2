@@ -23,7 +23,8 @@ class camera:
         self.d = 50.0
         self.x = 0.0
         self.last_my_theta = 0
-        self.cap = cv2.VideoCapture('/dev/video10')
+        # self.cap = cv2.VideoCapture('/dev/video10')
+        self.cap = cv2.VideoCapture('../media/test3.mp4')
         self.aP = [0., 0.]
         self.lastP = [0., 0.]
 
@@ -32,6 +33,9 @@ class camera:
 
     def spin(self):
         ret, img = self.cap.read()
+        def show(direction):
+            cv2.putText(img, direction, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+            cv2.imshow('img', img)
         if ret:
             cv2.waitKey(1)
             gray_blur = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -47,6 +51,7 @@ class camera:
 
             if len(lane_base) == 0:
                 self.d = 48
+                show('center')
                 return self.d
 
             nonzero = binary_warped.nonzero()
@@ -72,6 +77,7 @@ class camera:
 
             if hg == -1:
                 self.d = 48
+                show('center')
                 return self.d
 
             for i in range(len(nonzeroy)):
@@ -98,11 +104,14 @@ class camera:
 
             if now >= 2:
                 self.d = 48
+                show('center')
             else:
                 if p[q[1]] < half_width:
                     self.d = RRR
+                    show('right')
                 else:
                     self.d = LLL
+                    show('left')
             return self.d
 
 if __name__ == '__main__':
