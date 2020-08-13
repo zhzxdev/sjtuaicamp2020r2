@@ -91,7 +91,7 @@ def signCb(data):
         last_speed = state_speed
     elif cheat_state == 2:
         last_speed = state_speed
-        cheat_type = 0
+        cheat_state = 0
     else:
         cheat_state += 1
         state_speed = 0 if cheat_state == 0 else 50
