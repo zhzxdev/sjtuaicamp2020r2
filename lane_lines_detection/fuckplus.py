@@ -23,18 +23,18 @@ l_hyper = (int(l_k * h_hyper + l_b), h_hyper)
 # print(l_k, l_b)
 ################################################################################ MAGICS
 thr_common_base = .3
-thr_common_min = 30 * 255
+thr_common_min = 30
 thr_binary_v = 175
 thr_binary_s = 50
-thr_pesd_area = int((h_start - h_end) * (1280 - gap - gap - l_end[0]) * 255 * .7 * .5)
+thr_pesd_area = int((h_start - h_end) * (1280 - gap - gap - l_end[0]) * .7 * .5)
 thr_pesd_base = .3
-thr_pesd_min = 5 * 255
-thr_pesd_force = int((h_start - h_end) * (1280 - r_end[0]) * 255 * .35 * .5)
+thr_pesd_min = 5
+thr_pesd_force = int((h_start - h_end) * (1280 - r_end[0]) * .35 * .5)
 
 
 class camera:
     def __init__(self):
-        self.cap = cv2.VideoCapture("C:\\Users\\Zhang\\Downloads\\testpesd.mp4")
+        self.cap = cv2.VideoCapture("C:\\Users\\Zhang\\Downloads\\test2.mp4")
         # self.cap = cv2.VideoCapture("C:\\Users\\Zhang\\Downloads\\Telegram Desktop\\challenge_video_2 2.mp4")
 
     def __del__(self):
@@ -55,10 +55,10 @@ class camera:
             step2 = cv2.dilate(step2, np.ones((3, 3), np.uint8), iterations=1)
             rl, rr = 0, 0
             for i in range(h_end, h_start):
-                rl += np.sum(step2[i][:int(l_k * i + l_b)])
-                rr += np.sum(step2[i][int(r_k * i + r_b):])
-            sl = np.sum(step2[h_end:h_start, :640 - gap]) - rl
-            sr = np.sum(step2[h_end:h_start, 640 + gap:]) - rr
+                rl += np.sum(step2[i][:int(l_k * i + l_b)]) / 255
+                rr += np.sum(step2[i][int(r_k * i + r_b):]) / 255
+            sl = np.sum(step2[h_end:h_start, :640 - gap]) / 255 - rl
+            sr = np.sum(step2[h_end:h_start, 640 + gap:]) / 255 - rr
             realthr_common = int(max(max(sl, sr) * thr_common_base, thr_common_min))
             state = 0 if abs(sl - sr) < realthr_common else 1 if sl < sr else 2
             is_pesd = False
@@ -72,11 +72,11 @@ class camera:
                     state = 2
                     cv2.putText(step2, 'F R(' + str(rl) + '/' + str(thr_pesd_force) + ')', (50, 200), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 5)
                 else:
-                    psl = np.sum(step2[h_hyper:h_end, :640 - gap])
-                    psr = np.sum(step2[h_hyper:h_end, 640 + gap:])
+                    psl = np.sum(step2[h_hyper:h_end, :640 - gap]) / 255
+                    psr = np.sum(step2[h_hyper:h_end, 640 + gap:]) / 255
                     for i in range(h_hyper, h_end):
-                        psl -= np.sum(step2[i][:int(l_k * i + l_b)])
-                        psr -= np.sum(step2[i][int(r_k * i + r_b):])
+                        psl -= np.sum(step2[i][:int(l_k * i + l_b)]) / 255
+                        psr -= np.sum(step2[i][int(r_k * i + r_b):]) / 255
                     realthr_pesd = int(max(max(psl, psr) * thr_pesd_base, thr_pesd_min))
                     state = 0 if abs(psl - psr) < realthr_pesd else 1 if psl < psr else 2
                     cv2.putText(step2, str(realthr_pesd), (50, 200), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
