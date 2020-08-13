@@ -54,7 +54,7 @@ class camera:
             upper_half_histSum = np.sum(histogram_y[0:midpoint_y])
             lower_half_histSum = np.sum(histogram_y[midpoint_y:])
             try:
-                hist_sum_y_ratio = (upper_half_histSum) / (lower_half_histSum)
+                hist_sum_y_ratio = upper_half_histSum / lower_half_histSum
             except:
                 hist_sum_y_ratio = 1
 
