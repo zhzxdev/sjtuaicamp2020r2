@@ -72,6 +72,8 @@ def signCb(data):
     onpesd = (data & 4) == 4
     global state_speed
     global state_onpesd
+    global cheat_state
+    global cheat_type
     state_onpesd = onpesd
     state_speed = speeds[speed] - speed_shift if state_onpesd else speeds[speed]
     if cheat_state == 0:
