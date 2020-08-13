@@ -8,7 +8,8 @@ import numpy as np
 
 block3 = 100
 RRR = 55
-LLL = 40
+LLL = 45
+MMM = 49
 half_width = 320
 half_height = 180
 
@@ -44,7 +45,7 @@ class camera:
             lane_base = list(filter(lambda x: histogram_x[x] > 2500, range(len(histogram_x))))
 
             if len(lane_base) == 0:
-                self.d = 48
+                self.d = MMM
                 show('center')
                 return self.d
 
@@ -54,7 +55,7 @@ class camera:
             cnt = 0
 
             if 359 - nonzero[0][0] > block3:
-                self.d = 48
+                self.d = MMM
                 show('center')
                 return self.d
             hg = 359 - nonzero[0][0]
