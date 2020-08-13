@@ -68,8 +68,8 @@ class camera:
             cv2.putText(vis_out, str(sumr), r_end, cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
             cv2.putText(vis_out, str(state), (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 5)
             cv2.putText(vis_out, str(real_thr), (50, 100), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
-            vis_out = cv2.resize(vis_out, (0, 0), fx=.5, fy=.5)
             cv2.putText(vis_out, str(abs(suml - sumr)), (50, 150), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
+            vis_out = cv2.resize(vis_out, (0, 0), fx=.5, fy=.5)
 
             cv2.imshow('out', vis_out)
             key = cv2.waitKey(1)
