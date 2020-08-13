@@ -4,3 +4,5 @@
 /temp/**/*
 !/temp/.gitkeep
 *.avi
+*.png
+*.7z
