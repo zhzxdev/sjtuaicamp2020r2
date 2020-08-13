@@ -2,7 +2,6 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-import pickle
 
 
 def abs_sobel_thresh(img, orient='x', thresh_min=20, thresh_max=100):
@@ -97,13 +96,7 @@ if __name__ == '__main__':
 	img_file = 'test_images/straight_lines1.jpg'
 	img_file = 'test_images/test5.jpg'
 
-	with open('calibrate_camera.p', 'rb') as f:
-		save_dict = pickle.load(f)
-	mtx = save_dict['mtx']
-	dist = save_dict['dist']
-
 	img = mpimg.imread(img_file)
-	img = cv2.undistort(img, mtx, dist, None, mtx)
 
 	combined, abs_bin, mag_bin, dir_bin, hls_bin = combined_thresh(img)
 
