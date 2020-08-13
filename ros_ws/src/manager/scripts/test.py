@@ -39,51 +39,10 @@ pub_g = rospy.Publisher('/auto_driver/send/gear', Int32, queue_size=10)
 
 
 def applyState():
-    print('--> ', state_manul, state_direction, state_speed, state_gear, state_paused)
-    if debug_fakerun:
-        return
     pub_m.publish(state_manul)
     pub_d.publish(state_direction)
     pub_s.publish(state_speed)
     pub_g.publish(state_gear)
-
-
-################################################################################ Callbacks
-# data: int
-def laneCb(data):
-    if state_paused:
-        return
-    global state_direction
-    state_direction = data.data
-
-
-# data: int, 0 for stop, 1 for slow, 2 for fast
-speeds = [0, 25, 35]  # TODO Use real speeds
-speed_shift = 10
-
-
-def signCb(data):
-    if state_paused:
-        return
-    data = data.data
-    speed = data & 3
-    onpesd = (data & 4) == 4
-    global state_speed
-    global state_onpesd
-    state_onpesd = onpesd
-    state_speed = speeds[speed] - speed_shift if state_onpesd else speeds[speed]
-
-
-def pauseCb(data):
-    global state_paused
-    global state_speed
-    if data.data == 1:
-        state_paused = True
-        state_speed = 0
-    else:
-        state_paused = False
-        state_speed = debug_default_speed
-
 
 ################################################################################ Main
 def realmain():
@@ -94,15 +53,14 @@ def realmain():
     rospy.init_node('manager', anonymous=True)
     threading.Thread(target=lambda: rospy.spin()).start()
     rate = rospy.Rate(10)
-    if not debug_disable_lanecam:
-        rospy.Subscriber("/lane_det", Int32, laneCb)
-    if not debug_disable_hilens:
-        rospy.Subscriber("/sign_det", Int32, signCb)
-    if debug_enable_pause:
-        rospy.Subscriber("/debug/pause", Int32, pauseCb)
+    state_speed = 35
+    count = 0
     while not rospy.is_shutdown():
-        applyState()
-        rate.sleep()
+      count += 1
+      if count == 50:
+        state_speed -= 10
+      applyState()
+      rate.sleep()
 
 
 if __name__ == '__main__':

@@ -10,8 +10,9 @@ pub_r = r.Publisher('/lane_det', Int32, queue_size=10)
 pub_p = r.Publisher('/debug/pause', Int32, queue_size=10)
 
 ################################################################################ CONST
-dirs = [49, 10, 70]
+dirs = [51, 9, 70]
 gap = 24
+pesd_shift = 10
 ################################################################################ HOTSPOTS
 margin = 30
 h_start = 645 - margin
@@ -67,10 +68,13 @@ class camera:
             realthr_common = int(max(max(suml, sumr) * thr_common_base, thr_common_min))
             state = 0 if abs(suml - sumr) < realthr_common else 1 if suml < sumr else 2
             is_pesd = False
+            shift = 0
             if suml + sumr > thr_pesd_area:
                 is_pesd = True
                 realthr_pesd = int(max(max(dltl, dltr) * thr_pesd_base, thr_pesd_min))
                 state = 0 if abs(dltl - dltr) < realthr_pesd else 1 if dltl > dltr else 2
+                if state != 2:
+                    shift = -pesd_shift
                 cv2.putText(step2, str(realthr_pesd), (50, 200), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
                 cv2.putText(step2, str(abs(dltl - dltr)), (50, 250), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
 
@@ -94,7 +98,7 @@ class camera:
                 pub_p.publish(1)
                 cv2.waitKey(0)
                 pub_p.publish(0)
-            return dirs[state]
+            return max(min(dirs[state] + shift, 100), 0)
         else:
             raise "Fuck!!!"
 
