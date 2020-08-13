@@ -3,16 +3,16 @@ import math
 import numpy as np
 
 h_start = 645
-h_end = 455
+h_end = 300
 r_start = (1279, h_start)
-r_end = (915, h_end)
-r_cast = (915, 719)
+r_end = (665, h_end)
+r_cast = (665, 719)
 r_orig = (1279, 719)
 r_k, r_b = np.polyfit([r_start[1], r_end[1]], [r_start[0], r_end[0]], 1)
 print(r_k, r_b)
 l_start = (0, h_start)
-l_end = (365, h_end)
-l_cast = (365, 719)
+l_end = (615, h_end)
+l_cast = (615, 719)
 l_orig = (0, 719)
 l_k, l_b = np.polyfit([l_start[1], l_end[1]], [l_start[0], l_end[0]], 1)
 print(l_k, l_b)
@@ -23,7 +23,7 @@ dirs = [49, 55, 45]
 
 class camera:
     def __init__(self):
-        self.cap = cv2.VideoCapture("C:\\Users\\Zhang\\Downloads\\out1.mp4")
+        self.cap = cv2.VideoCapture("C:\\Users\\Zhang\\Downloads\\test2.mp4")
         # self.cap = cv2.VideoCapture("C:\\Users\\Zhang\\Downloads\\Telegram Desktop\\challenge_video_2 2.mp4")
 
     def __del__(self):

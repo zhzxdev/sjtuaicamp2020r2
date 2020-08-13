@@ -10,13 +10,14 @@ import threading
 import os
 
 ################################################################################ DEBUG
-debug_disable_hilens = False
+debug_disable_hilens = True
 debug_disable_lanecam = False
 debug_enable_pause = True
+debug_default_speed = 30
 
 ################################################################################ STATE
 state_manul = 0  # 0 - Automatic
-state_speed = 20 if debug_disable_hilens else 0  # SPEED
+state_speed = debug_default_speed if debug_disable_hilens else 0  # SPEED
 state_direction = 49  # 0-LEFT-50-RIGHT-100
 state_gear = 1  # 1 - Drive, 2 - Stop
 state_onpesd = False
@@ -70,7 +71,7 @@ def pauseCb(data):
         state_speed = 0
     else:
         state_paused = False
-        state_speed = 20
+        state_speed = debug_default_speed
 
 
 ################################################################################ Main
