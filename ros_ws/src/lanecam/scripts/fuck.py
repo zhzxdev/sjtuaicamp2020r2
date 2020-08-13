@@ -31,6 +31,8 @@ dirs = [49, 55, 45]
 class camera:
     def __init__(self):
         self.cap = cv2.VideoCapture("/dev/video10")
+        self.cap.set(3, 1280)
+        self.cap.set(4, 720)
         # self.cap = cv2.VideoCapture("C:\\Users\\Zhang\\Downloads\\Telegram Desktop\\challenge_video_2 2.mp4")
 
     def __del__(self):
@@ -75,6 +77,8 @@ class camera:
                 cv2.waitKey(0)
                 pub_p.publish(0)
             return dirs[state]
+        else:
+            raise "Fuck!!!"
 
 
 def realmain():
