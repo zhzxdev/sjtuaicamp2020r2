@@ -26,7 +26,8 @@ print(l_k, l_b)
 center_thr = .3
 center_lim = 30 * 255
 
-dirs = [49, 35, 65]
+dirs = [49, 25, 70]
+
 
 class camera:
     def __init__(self):
@@ -41,8 +42,6 @@ class camera:
     def spin(self):
         ret, img = self.cap.read()
         if ret:
-            cv2.imshow('raw', img)
-
             img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             img_s = img_hsv[:, :, 1]
             img_v = img_hsv[:, :, 2]
@@ -60,15 +59,19 @@ class camera:
                 limitr = int(r_k * i + r_b)
                 sumr += np.sum(step2[i][r_end[0]:limitr])
             real_thr = int(max(max(suml, sumr) * center_thr, center_lim))
-            cv2.polylines(step2, [np.array([l_start, l_end, l_cast, l_orig])], 1, (255, 0, 0), 5)
-            cv2.polylines(step2, [np.array([r_start, r_end, r_cast, r_orig])], 1, (0, 255, 0), 5)
-            cv2.putText(step2, str(suml), l_end, cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 5)
-            cv2.putText(step2, str(sumr), r_end, cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
             state = 0 if abs(suml - sumr) < real_thr else 1 if suml < sumr else 2
-            cv2.putText(step2, str(state), (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 5)
-            cv2.putText(step2, str(real_thr), (50, 100), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
-            cv2.putText(step2, str(abs(suml - sumr)), (50, 150), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
-            cv2.imshow('s2', step2)
+
+            vis_out = step2
+            cv2.polylines(vis_out, [np.array([l_start, l_end, l_cast, l_orig])], 1, (255, 0, 0), 5)
+            cv2.polylines(vis_out, [np.array([r_start, r_end, r_cast, r_orig])], 1, (0, 255, 0), 5)
+            cv2.putText(vis_out, str(suml), l_end, cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 5)
+            cv2.putText(vis_out, str(sumr), r_end, cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
+            cv2.putText(vis_out, str(state), (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 5)
+            cv2.putText(vis_out, str(real_thr), (50, 100), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
+            vis_out = cv2.resize(vis_out, (0, 0), fx=.5, fy=.5)
+            cv2.putText(vis_out, str(abs(suml - sumr)), (50, 150), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
+
+            cv2.imshow('out', vis_out)
             key = cv2.waitKey(1)
             if key == ord('q'):
                 exit(0)
