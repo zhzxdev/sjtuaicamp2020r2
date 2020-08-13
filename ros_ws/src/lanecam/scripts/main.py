@@ -73,7 +73,6 @@ class camera:
             p = np.zeros_like(nonzerox)
             cnt = 0
 
-            hg = -1
             if nonzeroy[0] > block3:
                 hg = -1
             else:
