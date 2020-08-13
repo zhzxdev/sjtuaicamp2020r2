@@ -40,7 +40,7 @@ for image_file in image_files:
 	# Do full annotation on original image
 	# Code is the same as in 'line_fit_video.py'
 	orig = mpimg.imread('test_images/' + image_file)
-	undist = cv2.undistort(orig, mtx, dist, None, mtx)
+	undist = orig
 	left_curve, right_curve = calc_curve(left_lane_inds, right_lane_inds, nonzerox, nonzeroy)
 
 	bottom_y = undist.shape[0] - 1

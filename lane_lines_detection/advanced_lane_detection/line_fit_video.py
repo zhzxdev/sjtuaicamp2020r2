@@ -28,7 +28,7 @@ def annotate_image(img_in):
 	global left_curve, right_curve, left_lane_inds, right_lane_inds
 
 	# Undistort, threshold, perspective transform
-	undist = cv2.undistort(img_in, mtx, dist, None, mtx)
+	undist = img_in
 	img, abs_bin, mag_bin, dir_bin, hls_bin = combined_thresh(undist)
 	binary_warped, binary_unwarped, m, m_inv = perspective_transform(img)
 
