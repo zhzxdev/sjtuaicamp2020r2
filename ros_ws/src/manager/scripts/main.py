@@ -10,7 +10,7 @@ import threading
 import os
 
 ################################################################################ DEBUG
-debug_disable_hilens = False
+debug_disable_hilens = True
 debug_disable_lanecam = False
 debug_enable_pause = True
 
@@ -81,9 +81,9 @@ def realmain():
     rospy.init_node('manager', anonymous=True)
     threading.Thread(target=lambda: rospy.spin()).start()
     rate = rospy.Rate(10)
-    if not debug_disable_hilens:
-        rospy.Subscriber("/lane_det", Int32, laneCb)
     if not debug_disable_lanecam:
+        rospy.Subscriber("/lane_det", Int32, laneCb)
+    if not debug_disable_hilens:
         rospy.Subscriber("/sign_det", Int32, signCb)
     if debug_enable_pause:
         rospy.Subscriber("/debug/pause", Int32, pauseCb)
