@@ -10,7 +10,7 @@ import threading
 import os
 
 ################################################################################ DEBUG
-debug_disable_hilens = True
+debug_disable_hilens = False
 debug_disable_lanecam = False
 debug_enable_pause = True
 debug_default_speed = 30
