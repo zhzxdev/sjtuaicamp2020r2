@@ -8,12 +8,18 @@ from std_msgs.msg import Bool
 import numpy as np
 import threading
 
+################################################################################ DEBUG
+debug_disable_hilens = False
+debug_disable_lanecam = False
+debug_enable_pause = True
+
 ################################################################################ STATE
 state_manul = 0  # 0 - Automatic
-state_speed = 0  # SPEED
-state_direction = 50  # 0-LEFT-50-RIGHT-100
+state_speed = 20 if debug_disable_hilens else 0  # SPEED
+state_direction = 49  # 0-LEFT-50-RIGHT-100
 state_gear = 1  # 1 - Drive, 2 - Stop
 state_onpesd = False
+state_paused = False
 
 ################################################################################ Publishers
 pub_m = rospy.Publisher('/bluetooth/received/manual', Int32, queue_size=10)
@@ -33,15 +39,19 @@ def applyState():
 ################################################################################ Callbacks
 # data: int
 def laneCb(data):
+    if state_paused:
+        return
     global state_direction
     state_direction = data.data
 
 
 # data: int, 0 for stop, 1 for slow, 2 for fast
-speeds = [0, 5, 15] # TODO Use real speeds
+speeds = [0, 5, 15]  # TODO Use real speeds
 
 
 def signCb(data):
+    if state_paused:
+        return
     data = data.data
     speed = data & 3
     onpesd = (data & 4) == 4
@@ -51,6 +61,14 @@ def signCb(data):
     state_onpesd = onpesd
 
 
+def pauseCb(data):
+    global state_paused
+    global state_speed
+    state_paused = True
+    state_speed = 0
+
+
+################################################################################ Main
 def realmain():
     global state_manul
     global state_direction
@@ -59,30 +77,13 @@ def realmain():
     rospy.init_node('manager', anonymous=True)
     threading.Thread(target=lambda: rospy.spin()).start()
     rate = rospy.Rate(10)
-    rospy.Subscriber("/lane_det", Int32, laneCb)
-    rospy.Subscriber("/sign_det", Int32, signCb)
-    # cmd_vel = Twist()
-    # flag = 0
-    # p_flag = 1
-    # servodata_list = []
-    # n_loop = 1
-    # n = 1
-    # servodata_list = n * [servodata]
+    if not debug_disable_hilens:
+        rospy.Subscriber("/lane_det", Int32, laneCb)
+    if not debug_disable_lanecam:
+        rospy.Subscriber("/sign_det", Int32, signCb)
+    if debug_enable_pause:
+        rospy.Subscriber("/debug/pause", Int32, pauseCb)
     while not rospy.is_shutdown():
-        # KINEMATIC CONTROL CODE HERE
-        # servodata_list[0:n - 1] = servodata_list[1:n]
-        # servodata_list[n - 1] = servodata
-        #servodata_mean = np.mean(servodata_list)*n
-        # servoSum = 0
-        # for i in servodata_list:
-        #     servoSum += i
-
-        # servodata_mean = servoSum / n
-
-        # WRITE YOUR CONDITION STATEMENT HERE, PLS FINISH
-        # USE (traffic_light_data)
-        # TO CHANGE: GEAR, DIRECTION(IF DRIVE, USE servodata_mean)
-        # GEAR: 1 - D(RIVE); 2 - N(EUTRAL).
         applyState()
         rate.sleep()
 
