@@ -21,7 +21,6 @@ The following steps were performed for lane detection:
 * Numpy
 * OpenCV-Python
 * Matplotlib
-* Pickle
 
 ## How to run
 Run `python line_fit_video.py`. This will take the raw video file at 'project_video.mp4', and create an annotated output video at 'out.mp4'. Afterwards, it will display an example annotated image on screen.

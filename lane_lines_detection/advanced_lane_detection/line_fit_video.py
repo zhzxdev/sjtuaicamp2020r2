@@ -2,7 +2,6 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-import pickle
 from combined_thresh import combined_thresh
 from perspective_transform import perspective_transform
 from Line import Line
@@ -11,10 +10,6 @@ from moviepy.editor import VideoFileClip
 
 
 # Global variables (just to make the moviepy video annotation work)
-with open('calibrate_camera.p', 'rb') as f:
-	save_dict = pickle.load(f)
-mtx = save_dict['mtx']
-dist = save_dict['dist']
 window_size = 5  # how many frames for line smoothing
 left_line = Line(n=window_size)
 right_line = Line(n=window_size)
@@ -104,10 +99,10 @@ if __name__ == '__main__':
 	annotate_video('project_video.mp4', 'out.mp4')
 
 	# Show example annotated image on screen for sanity check
-	img_file = 'test_images/test2.jpg'
-	img = mpimg.imread(img_file)
-	result = annotate_image(img)
-	result = annotate_image(img)
-	result = annotate_image(img)
-	plt.imshow(result)
-	plt.show()
+	# img_file = 'test_images/test2.jpg'
+	# img = mpimg.imread(img_file)
+	# result = annotate_image(img)
+	# result = annotate_image(img)
+	# result = annotate_image(img)
+	# plt.imshow(result)
+	# plt.show()
