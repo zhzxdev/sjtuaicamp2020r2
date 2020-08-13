@@ -93,7 +93,7 @@ def realmain():
     global state_gear
     rospy.init_node('manager', anonymous=True)
     threading.Thread(target=lambda: rospy.spin()).start()
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(20)
     if not debug_disable_lanecam:
         rospy.Subscriber("/lane_det", Int32, laneCb)
     if not debug_disable_hilens:

@@ -52,7 +52,7 @@ def realmain():
     global state_gear
     rospy.init_node('manager', anonymous=True)
     threading.Thread(target=lambda: rospy.spin()).start()
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(20)
     state_speed = 35
     count = 0
     while not rospy.is_shutdown():
