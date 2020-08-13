@@ -10,10 +10,18 @@ import threading
 import os
 
 ################################################################################ DEBUG
-debug_disable_hilens = False
-debug_disable_lanecam = False
+debug_disable_hilens = os.getenv('DEBUG_NOHILENS') == '1'
+debug_disable_lanecam = os.getenv('DEBUG_NOLANECAM') == '1'
+debug_fakerun = os.getenv('DEBUG_FAKERUN') == '1'
 debug_enable_pause = True
 debug_default_speed = 30
+print('################################################################################')
+print('HiLens       : ' + str(not debug_disable_hilens))
+print('LaneCam      : ' + str(not debug_disable_lanecam))
+print('FakeRun      : ' + str(debug_fakerun))
+print('Pause        : ' + str(debug_enable_pause))
+print('DefaultSpeed : ' + str(debug_default_speed))
+print('################################################################################')
 
 ################################################################################ STATE
 state_manul = 0  # 0 - Automatic
@@ -31,7 +39,9 @@ pub_g = rospy.Publisher('/auto_driver/send/gear', Int32, queue_size=10)
 
 
 def applyState():
-    print('s -> ', state_manul, state_direction, state_speed, state_gear, state_paused)
+    print('--> ', state_manul, state_direction, state_speed, state_gear, state_paused)
+    if debug_fakerun:
+        return
     pub_m.publish(state_manul)
     pub_d.publish(state_direction)
     pub_s.publish(state_speed)
@@ -48,7 +58,8 @@ def laneCb(data):
 
 
 # data: int, 0 for stop, 1 for slow, 2 for fast
-speeds = [0, 10, 30]  # TODO Use real speeds
+speeds = [0, 30, 40]  # TODO Use real speeds
+speed_shift = 10
 
 
 def signCb(data):
@@ -59,8 +70,8 @@ def signCb(data):
     onpesd = (data & 4) == 4
     global state_speed
     global state_onpesd
-    state_speed = speeds[speed]
     state_onpesd = onpesd
+    state_speed = speeds[speed] - speed_shift if state_onpesd else speeds[speed]
 
 
 def pauseCb(data):

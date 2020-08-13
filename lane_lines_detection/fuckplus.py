@@ -30,7 +30,7 @@ thr_pesd_min = 10 * 255
 
 class camera:
     def __init__(self):
-        self.cap = cv2.VideoCapture("C:\\Users\\Zhang\\Downloads\\testpesd.mp4")
+        self.cap = cv2.VideoCapture("C:\\Users\\Zhang\\Downloads\\test2.mp4")
         # self.cap = cv2.VideoCapture("C:\\Users\\Zhang\\Downloads\\Telegram Desktop\\challenge_video_2 2.mp4")
 
     def __del__(self):
