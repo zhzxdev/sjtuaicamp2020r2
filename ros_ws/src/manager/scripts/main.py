@@ -13,6 +13,7 @@ state_manul = 0  # 0 - Automatic
 state_speed = 0  # SPEED
 state_direction = 50  # 0-LEFT-50-RIGHT-100
 state_gear = 1  # 1 - Drive, 2 - Stop
+state_onpesd = False
 
 ################################################################################ Publishers
 pub_m = rospy.Publisher('/bluetooth/received/manual', Int32, queue_size=10)
@@ -22,7 +23,7 @@ pub_g = rospy.Publisher('/auto_driver/send/gear', Int32, queue_size=10)
 
 
 def applyState():
-    print('current state -> ', state_manul, state_direction, state_speed, state_gear)
+    print('current state -> ', state_manul, state_direction, state_speed, state_gear, state_onpesd)
     pub_m.publish(state_manul)
     pub_d.publish(state_direction)
     pub_s.publish(state_speed)
@@ -41,8 +42,13 @@ speeds = [0, 5, 15] # TODO Use real speeds
 
 
 def signCb(data):
+    data = data.data
+    speed = data & 3
+    onpesd = (data & 4) == 4
     global state_speed
-    state_speed = speeds[data.data]
+    global state_onpesd
+    state_speed = speeds[speed]
+    state_onpesd = onpesd
 
 
 def realmain():
