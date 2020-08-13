@@ -4,6 +4,7 @@ import cv2
 import math
 import numpy as np
 import rospy as r
+from std_msgs.msg import Int32
 
 pub_r = r.Publisher('/lane_det', Int32, queue_size=10)
 pub_p = r.Publisher('/debug/pause', Int32, queue_size=10)
