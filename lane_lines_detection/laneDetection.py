@@ -23,7 +23,7 @@ class camera:
         self.camMat = []
         self.camDistortion = []
 
-        self.cap = cv2.VideoCapture('test3.mp4')
+        self.cap = cv2.VideoCapture('../media/test3.mp4')
 
         self.aP = [0, 0]
         self.lastP = [0, 0]
@@ -102,7 +102,7 @@ class camera:
             aimLaneP = [pixelX[frontDistance], pixelY[frontDistance]]
 
             lanePk = 2 * a2 * aimLaneP[0] + a1
-            if (abs(lanePk) < 0.1):
+            if abs(lanePk) < 0.1:
                 if lane_base >= midpoint:
                     LorR = -1.25
                 else:
