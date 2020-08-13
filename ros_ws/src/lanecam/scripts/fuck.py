@@ -65,7 +65,7 @@ class camera:
             cv2.putText(step2, str(suml), l_end, cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 5)
             cv2.putText(step2, str(sumr), r_end, cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
             state = 0 if abs(suml - sumr) < real_thr else 1 if suml < sumr else 2
-            cv2.putText(step2, state, (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 5)
+            cv2.putText(step2, str(state), (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 5)
             cv2.putText(step2, str(real_thr), (50, 100), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
             cv2.putText(step2, str(abs(suml - sumr)), (50, 150), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
             cv2.imshow('s2', step2)

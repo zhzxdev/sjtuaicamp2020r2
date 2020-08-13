@@ -64,8 +64,11 @@ def signCb(data):
 def pauseCb(data):
     global state_paused
     global state_speed
-    state_paused = True
-    state_speed = 0
+    if data.data == 1:
+        state_paused = True
+        state_speed = 0
+    else:
+        state_paused = False
 
 
 ################################################################################ Main
