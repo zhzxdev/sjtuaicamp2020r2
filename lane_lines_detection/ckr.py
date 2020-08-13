@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import time
 
 LL = 40
 RRR = 55
@@ -54,35 +55,44 @@ class camera:
                 show('center')
                 return self.d
 
-            nonzero = binary_warped.nonzero()
-            tmp = []
-            for i in range(len(nonzero[0])):
-                tmp.append([nonzero[0][i], nonzero[1][i]])
-            tmp.sort(lambda p, q: int(q[0] - p[0]))
-            nonzeroy = np.array(map(lambda p: p[0], tmp))
-            nonzerox = np.array(map(lambda p: p[1], tmp))
-            nonzeroy = map(lambda x: 719 - x, nonzeroy)
+            nonzero = list(zip(*list(binary_warped.nonzero())))
+            nonzero.sort(cmp=lambda p, q: int(q[0]-p[0] if p[0]!=q[0] else p[1]-q[1]))
+            p = np.zeros(len(nonzero), dtype=int)
+            cnt = 0
 
-            if nonzeroy[0] > block3:
+            if 719 - nonzero[0][0] > block3:
                 self.d = 48
                 show('center')
                 return self.d
+            hg = 719 - nonzero[0][0]
 
-            hg = nonzeroy[0]
+            for i in range(len(nonzero)):
+                if 719 - nonzero[i][0] == hg:
+                    cnt += 1
+                    p[cnt] = nonzero[i][1]
 
-            p = sorted([nonzerox[i] for i in range(len(nonzeroy)) if nonzeroy[i] == hg])
-            q = []
-            for i in range(1, len(p)):
-                if p[i] != p[i - 1] + 1:
-                    q.append(i - 1)
-            q.append(len(p)-1)
-            now = len(q)
+            p[0] = 0
+            for i in range(len(nonzero) - cnt - 1):
+                p[i + cnt + 1] = 10000000
+
+            p = sorted(p)
+            q = np.zeros_like(p)
+            num = 0
+            for i in range(1, cnt + 1):
+                if p[i] != p[i - 1] + 1 and i != 1:
+                    num += 1
+                    q[num] = i - 1
+            num += 1
+            q[num] = cnt
+
+            q[0] = -1
+            now = num
 
             if now >= 2:
                 self.d = 48
                 show('center')
             else:
-                if p[q[0]] < half_width:
+                if p[q[1]] < half_width:
                     self.d = RRR
                     show('right')
                 else:
@@ -93,4 +103,36 @@ class camera:
 if __name__ == '__main__':
     cam = camera()
     while True:
+        time_s = time.time()
         cam.spin()
+        time_t = time.time()
+        print 'time: ' + str(time_t - time_s) + 's'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
