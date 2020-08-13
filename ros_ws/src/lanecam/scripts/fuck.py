@@ -12,7 +12,7 @@ DEBUG = True
 pub_r = r.Publisher('/lane_det', Int32, queue_size=10)
 pub_p = r.Publisher('/debug/pause', Int32, queue_size=10)
 ################################################################################ CONST
-dirs = [51, 9, 70]
+dirs = [51, 0, 70]
 gap = 24
 pesd_shift = 0
 ################################################################################ HOTSPOTS
