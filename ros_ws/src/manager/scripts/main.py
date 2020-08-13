@@ -30,7 +30,7 @@ pub_g = rospy.Publisher('/auto_driver/send/gear', Int32, queue_size=10)
 
 
 def applyState():
-    print('current state -> ', state_manul, state_direction, state_speed, state_gear, state_onpesd)
+    print('s -> ', state_manul, state_direction, state_speed, state_gear, state_paused)
     pub_m.publish(state_manul)
     pub_d.publish(state_direction)
     pub_s.publish(state_speed)
