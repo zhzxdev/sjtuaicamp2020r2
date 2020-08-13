@@ -7,8 +7,8 @@ import cv2
 import numpy as np
 
 block3 = 100
-RRR = 55
-LLL = 45
+RRR = 70
+LLL = 10
 MMM = 49
 half_width = 320
 half_height = 180
