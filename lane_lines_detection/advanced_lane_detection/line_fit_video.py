@@ -96,7 +96,7 @@ def annotate_video(input_file, output_file):
 
 if __name__ == '__main__':
 	# Annotate the video
-	annotate_video('project_video.mp4', 'out.mp4')
+	annotate_video('../test2.mp4', 'out.mp4')
 
 	# Show example annotated image on screen for sanity check
 	# img_file = 'test_images/test2.jpg'

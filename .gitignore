@@ -5,3 +5,5 @@
 !/temp/.gitkeep
 *.avi
 *.png
+*.7z
+__pycache__
