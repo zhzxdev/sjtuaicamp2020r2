@@ -25,8 +25,8 @@ class camera:
 
         self.cap = cv2.VideoCapture('test3.mp4')
 
-        self.aP = [0.0, 0.0]
-        self.lastP = [0.0, 0.0]
+        self.aP = [0, 0]
+        self.lastP = [0, 0]
         self.Timer = 0
         self.angularScale = 6
 
@@ -36,7 +36,6 @@ class camera:
     def spin(self):
         ret, img = self.cap.read()
         if ret == True:
-            cv2.waitKey(1)
             gray_Blur = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             kernel = np.ones((3, 3), np.uint8)
             gray_Blur = cv2.erode(gray_Blur, kernel, iterations=1)
@@ -94,7 +93,7 @@ class camera:
 
             # calculate the aimPoint
             if (pixelX.size == 0):
-                return
+                return 50
 
             a2, a1, a0 = np.polyfit(pixelY, pixelX, 2)
             aveX = np.average(pixelX)
@@ -114,13 +113,12 @@ class camera:
                 self.aP[0] = aimLaneP[0] + LorR * roadWidth / 2
                 self.aP[1] = aimLaneP[1]
             else:
-                if (2 * a2 * aveX + a1) > 0:
+                if 2 * a2 * aveX + a1 > 0:
                     if a2 > 0:
                         x_intertcept = (-a1 + (abs(a1 * a1 - 4 * a2 * (a0 - 1099.0)) ** 0.5)) / (2 * a2)
 
                     else:
                         x_intertcept = (-a1 - (abs(a1 * a1 - 4 * a2 * (a0 - 1099.0)) ** 0.5)) / (2 * a2)
-
 
                 else:
                     if a2 > 0:
@@ -129,30 +127,27 @@ class camera:
                     else:
                         x_intertcept = (-a1 + (abs(a1 * a1 - 4 * a2 * (a0 - 1099.0)) ** 0.5)) / (2 * a2)
 
-                if (x_intertcept > 599):
-                    LorR = -1.4  # RightLane
+                if x_intertcept > 599:
+                    LorR = -1.4
                 else:
-                    LorR = 0.8  # LeftLane
+                    LorR = 0.8
 
                 k_ver = - 1 / lanePk
 
                 theta = math.atan(k_ver)
-                self.aP[0] = aimLaneP[0] + math.cos(theta) * (LorR) * roadWidth / 2
-                self.aP[1] = aimLaneP[1] + math.sin(theta) * (LorR) * roadWidth / 2
-
-            self.aP[0] = (self.aP[0] - 599) * x_cmPerPixel
-            self.aP[1] = (680 - self.aP[1]) * y_cmPerPixel + y_offset
-
-            if (self.lastP[0] > 0.001 and self.lastP[1] > 0.001):
+                self.aP[0] = aimLaneP[0] + math.cos(theta) * LorR * roadWidth / 2
+                self.aP[1] = aimLaneP[1] + math.sin(theta) * LorR * roadWidth / 2
+            # Ruo liang ci mubiaodian xiangcha taida, ze hulue gai mubiaodian
+            # Fangzhi bei ganraowu qipian
+            if self.lastP[0] == 0 and self.lastP[1] == 0:
                 if (((self.aP[0] - self.lastP[0]) ** 2 + (
-                        self.aP[1] - self.lastP[1]) ** 2 > 2500) and self.Timer < 2):  # To avoid the mislead by walkers
+                        self.aP[1] - self.lastP[1]) ** 2 > 2500) and self.Timer < 2):
                     self.aP = self.lastP[:]
                     self.Timer += 1
                 else:
                     self.Timer = 0
 
             self.lastP = self.aP[:]
-            steerAngle = math.atan(2 * I * self.aP[0] / (self.aP[0] * self.aP[0] + (self.aP[1] + D) * (self.aP[1] + D)))
 
             img = cv2.resize(img, (0, 0), fx=.5, fy=.5)
             cv2.imshow('real_world', img)
