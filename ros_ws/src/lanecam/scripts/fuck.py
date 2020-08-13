@@ -85,6 +85,7 @@ class camera:
             cv2.putText(step2, str(state) + ',' + str(is_pesd), (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 5)
             cv2.putText(step2, str(realthr_common), (50, 100), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
             cv2.putText(step2, str(abs(suml - sumr)), (50, 150), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
+            step2 = cv2.resize(step2, (0, 0), fx=.5, fy=.5)
             cv2.imshow('s2', step2)
             key = cv2.waitKey(1)
             if key == ord('q'):
