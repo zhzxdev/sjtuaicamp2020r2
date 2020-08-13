@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import time
 
 block3 = 100
 RRR = 55
@@ -93,7 +92,4 @@ class camera:
 if __name__ == '__main__':
     cam = camera()
     while True:
-        time_s = time.time()
         cam.spin()
-        time_t = time.time()
-        print 'time: ' + str(time_t - time_s) + 's'
