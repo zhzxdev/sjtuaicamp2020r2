@@ -26,7 +26,7 @@ print(l_k, l_b)
 center_thr = .3
 center_lim = 30 * 255
 
-dirs = [49, 25, 70]
+dirs = [49, 0, 70]
 
 
 class camera:

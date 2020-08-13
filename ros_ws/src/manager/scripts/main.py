@@ -10,7 +10,7 @@ import threading
 import os
 
 ################################################################################ DEBUG
-debug_disable_hilens = True
+debug_disable_hilens = False
 debug_disable_lanecam = False
 debug_enable_pause = True
 
@@ -47,7 +47,7 @@ def laneCb(data):
 
 
 # data: int, 0 for stop, 1 for slow, 2 for fast
-speeds = [0, 5, 15]  # TODO Use real speeds
+speeds = [0, 10, 30]  # TODO Use real speeds
 
 
 def signCb(data):
@@ -70,6 +70,7 @@ def pauseCb(data):
         state_speed = 0
     else:
         state_paused = False
+        state_speed = 20
 
 
 ################################################################################ Main
