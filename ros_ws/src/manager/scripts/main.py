@@ -7,6 +7,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Bool
 import numpy as np
 import threading
+import os
 
 ################################################################################ DEBUG
 debug_disable_hilens = False
