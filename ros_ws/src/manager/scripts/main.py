@@ -56,6 +56,11 @@ def laneCb(data):
     global state_direction
     state_direction = data.data
 
+def fuckCb(data):
+    if state_paused:
+        return
+    global state_onpesd
+    state_onpesd = data.data == 1
 
 # data: int, 0 for stop, 1 for slow, 2 for fast
 speeds = [0, 25, 35]  # TODO Use real speeds
@@ -75,26 +80,7 @@ def signCb(data):
     global last_speed
     global cheat_state
     global cheat_type
-    state_onpesd = onpesd
     state_speed = speeds[speed] - speed_shift if state_onpesd else speeds[speed]
-    if cheat_state == 0:
-        if state_speed < last_speed:
-            cheat_type = 0
-            cheat_state = 1
-            state_speed = 0
-            cheat_state += 1
-        if state_speed > last_speed:
-            cheat_type = 1
-            cheat_state = 1
-            state_speed = 50
-            cheat_state += 1
-        last_speed = state_speed
-    elif cheat_state == 2:
-        last_speed = state_speed
-        cheat_state = 0
-    else:
-        cheat_state += 1
-        state_speed = 0 if cheat_state == 0 else 50
 
 
 def pauseCb(data):
@@ -119,6 +105,7 @@ def realmain():
     rate = rospy.Rate(20)
     if not debug_disable_lanecam:
         rospy.Subscriber("/lane_det", Int32, laneCb)
+        rospy.Subscriber("/lane_fuck", Int32, fuckCb)
     if not debug_disable_hilens:
         rospy.Subscriber("/sign_det", Int32, signCb)
     if debug_enable_pause:

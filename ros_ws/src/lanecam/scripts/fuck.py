@@ -10,9 +10,10 @@ from std_msgs.msg import Int32
 DEBUG = True
 ################################################################################ PUBLISHERS
 pub_r = r.Publisher('/lane_det', Int32, queue_size=10)
+pub_f = r.Publisher('/lane_fuck', Int32, queue_size=10)
 pub_p = r.Publisher('/debug/pause', Int32, queue_size=10)
 ################################################################################ CONST
-dirs = [51, 0, 70]
+dirs = [55, 0, 70]
 gap = 24
 pesd_shift = 0
 ################################################################################ HOTSPOTS
@@ -32,14 +33,15 @@ l_k, l_b = np.polyfit([l_start[1], l_end[1]], [l_start[0], l_end[0]], 1)
 l_hyper = (int(l_k * h_hyper + l_b), h_hyper)
 # print(l_k, l_b)
 ################################################################################ MAGICS
-thr_common_base = .3
-thr_common_min = 30
 thr_binary_v = 175
 thr_binary_s = 50
-thr_pesd_area = int((h_start - h_end) * (1280 - gap - gap - l_end[0]) * .7 * .5)
-thr_pesd_base = .3
-thr_pesd_min = 5
-thr_pesd_force = int((h_start - h_end) * (1280 - r_end[0]) * .35 * .5)
+fucker_hot_area = (h_start - h_end) * (1280 - gap - gap - l_end[0])
+thr_common = int(fucker_hot_area * .0125)
+thr_pesd_area = int(fucker_hot_area * .7 * .5)
+fucker_pesd_hot_area = (h_start - h_end) * (1280 - r_end[0])
+thr_pesd_force = int(fucker_pesd_hot_area * .35 * .5)
+thr_pesd = int(fucker_pesd_hot_area * .0125)
+thr_pesd_fuck = int(fucker_hot_area * .9 * .5)
 
 
 class camera:
@@ -69,10 +71,10 @@ class camera:
                 rr += np.sum(step2[i][int(r_k * i + r_b):]) / 255
             sl = np.sum(step2[h_end:h_start, :640 - gap]) / 255 - rl
             sr = np.sum(step2[h_end:h_start, 640 + gap:]) / 255 - rr
-            realthr_common = int(max(max(sl, sr) * thr_common_base, thr_common_min))
-            state = 0 if abs(sl - sr) < realthr_common else 1 if sl < sr else 2
+            state = 0 if abs(sl - sr) < thr_common else 1 if sl < sr else 2
             is_pesd = False
             shift = 0
+            pesd_fuck = 1 if sl > thr_pesd_fuck and sr > thr_pesd_fuck else 0
             if sl > thr_pesd_area and sr > thr_pesd_area:
                 is_pesd = True
                 if rr < thr_pesd_force:
@@ -87,10 +89,8 @@ class camera:
                     for i in range(h_hyper, h_end):
                         psl -= np.sum(step2[i][:int(l_k * i + l_b)]) / 255
                         psr -= np.sum(step2[i][int(r_k * i + r_b):]) / 255
-                    realthr_pesd = int(max(max(psl, psr) * thr_pesd_base, thr_pesd_min))
-                    state = 0 if abs(psl - psr) < realthr_pesd else 1 if psl < psr else 2
+                    state = 0 if abs(psl - psr) < thr_pesd else 1 if psl < psr else 2
                     if DEBUG:
-                        cv2.putText(step2, str(realthr_pesd), (50, 200), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
                         cv2.line(step2, l_hyper, (640 - gap, h_hyper), (127, 127, 0), 5)
                         cv2.line(step2, (640 - gap, h_hyper), (640 - gap, h_end), (127, 127, 0), 5)
                         cv2.line(step2, l_end, l_hyper, (127, 0, 0), 5)
@@ -110,8 +110,7 @@ class camera:
                 cv2.putText(step2, str(sl), l_end, cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 5)
                 cv2.putText(step2, str(sr), r_end, cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
                 cv2.putText(step2, str(state) + ',' + str(is_pesd), (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 5)
-                cv2.putText(step2, str(realthr_common), (50, 100), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
-                cv2.putText(step2, str(abs(sl - sr)), (50, 150), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
+                cv2.putText(step2, str(pesd_fuck), (50, 150), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 5)
                 step2 = cv2.resize(step2, (0, 0), fx=.5, fy=.5)
                 cv2.imshow('s2', step2)
                 key = cv2.waitKey(1)
@@ -121,7 +120,7 @@ class camera:
                     pub_p.publish(1)
                     cv2.waitKey(0)
                     pub_p.publish(0)
-            return max(min(dirs[state] + shift, 100), 0)
+            return max(min(dirs[state] + shift, 100), 0), pesd_fuck
         else:
             raise "Fuck!!!"
 
@@ -131,7 +130,9 @@ def realmain():
     rate = r.Rate(10)
     cam = camera()
     while not r.is_shutdown():
-        pub_r.publish(cam.spin())
+        ret0, ret1 = cam.spin()
+        pub_r.publish(ret0)
+        pub_f.publish(ret1)
         rate.sleep()
 
 
